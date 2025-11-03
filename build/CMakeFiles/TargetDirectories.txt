@@ -1,0 +1,3 @@
+C:/users/dayaa/rasterizer/build/CMakeFiles/tiny-rasterizer.dir
+C:/users/dayaa/rasterizer/build/CMakeFiles/ALL_BUILD.dir
+C:/users/dayaa/rasterizer/build/CMakeFiles/ZERO_CHECK.dir

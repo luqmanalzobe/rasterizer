@@ -1,47 +1,41 @@
 #pragma once
 
 #include <rasterizer/vector.hpp>
-
 #include <cstdint>
 #include <cmath>
 
 namespace rasterizer
 {
+    struct color4ub
+    {
+        std::uint8_t r, g, b, a;
+    };
 
-	struct color4ub
-	{
-		std::uint8_t r, g, b, a;
-	};
+    // Tiny helpers (avoid pulling <algorithm>)
+    template<typename T>
+    T max(T a, T b) { return (a > b) ? a : b; }
 
-	// Define custom min/max so that we don't have to include the full <algorithm> header
+    template<typename T>
+    T min(T a, T b) { return (a > b) ? b : a; }
 
-	template<typename T>
-	T max(T a, T b)
-	{
-		return (a > b) ? a : b;
-	}
+    inline color4ub to_color4ub(vector4f const& c)
+    {
+        color4ub result;
+        result.r = max(0.f, min(255.f, c.x * 255.f));
+        result.g = max(0.f, min(255.f, c.y * 255.f));
+        result.b = max(0.f, min(255.f, c.z * 255.f));
+        result.a = max(0.f, min(255.f, c.w * 255.f));
+        return result;
+    }
 
-	template<typename T>
-	T min(T a, T b)
-	{
-		return (a > b) ? b : a;
-	}
-
-	inline color4ub to_color4ub(vector4f const & c)
-	{
-		color4ub result;
-
-		result.r = max(0.f, min(255.f, c.x * 255.f));
-		result.g = max(0.f, min(255.f, c.y * 255.f));
-		result.b = max(0.f, min(255.f, c.z * 255.f));
-		result.a = max(0.f, min(255.f, c.w * 255.f));
-
-		return result;
-	}
-
-	inline vector4f to_vector4f(color4ub const & c)
-	{
-		return vector4f{c.r, c.g, c.b, c.a} / 255.f;
-	}
-
+    inline vector4f to_vector4f(color4ub const& c)
+    {
+        // Explicit casts prevent MSVC narrowing warnings/errors
+        return vector4f{
+            static_cast<float>(c.r),
+            static_cast<float>(c.g),
+            static_cast<float>(c.b),
+            static_cast<float>(c.a)
+        } / 255.f;
+    }
 }
